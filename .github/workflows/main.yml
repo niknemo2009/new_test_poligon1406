@@ -14,7 +14,9 @@ jobs:
       with:
         node-version: lts/*
     - name: CD
-      run: cd ./poligon_playwright 
+      run: cd ./poligon_playwright/
+    - name: ls
+      run: cd ./poligon_playwright/
     - name: Install dependencies
       run: npm ci
     - name: Install Playwright Browsers
