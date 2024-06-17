@@ -11,7 +11,7 @@ import java.util.List;
 public class TextBoxPage {
     private final WebDriver driver;
     @FindBy(css = "input#userName")
-    WebElement inputFullName;
+   private WebElement inputFullName;
     @FindBy(css = "input#userEmail")
     private WebElement inputEmail;
 
@@ -85,5 +85,9 @@ public class TextBoxPage {
 
         return new ItemTextBox(_fullName.substring(_fullName.indexOf(":")+1),_email.substring(_email.indexOf(":")+1),
                 _currentAddress.substring(_currentAddress.indexOf(":")+1),_permanentAddress.substring(_permanentAddress.indexOf(":")+1));
+    }
+
+    public String getCssClassInputEmail(){
+        return inputEmail.getAttribute("class");
     }
 }

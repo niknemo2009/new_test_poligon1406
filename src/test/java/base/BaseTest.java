@@ -73,7 +73,7 @@ public abstract class BaseTest {
         });
     }
 
-    public String repeat(String source, int countLetter) {
+    public static String repeat(String source, int countLetter) {
         StringBuilder sb = new StringBuilder();
         while (sb.toString().length() < countLetter) {
             sb.append(source);
@@ -84,6 +84,6 @@ public abstract class BaseTest {
     public void makeScreenshot(String pathFile, WebDriver driver) throws Exception {
         TakesScreenshot screenshot = (TakesScreenshot) driver;
         File source = screenshot.getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(source, new File(pathFile));
+        FileUtils.copyFile(source, new File(pathFile.substring(0,100)));
     }
 }
