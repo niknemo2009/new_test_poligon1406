@@ -1,8 +1,8 @@
-package demoqa_com;
+package com.demoqa;
 
-import base.BaseTest;
-import demoqa_com.model.ItemTextBox;
-import demoqa_com.page_object.TextBoxPage;
+import com.demoqa.base.BaseTest;
+import com.demoqa.model.ItemTextBox;
+import com.demoqa.page_object.TextBoxPage;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

@@ -1,17 +1,17 @@
-package demoqa_com.page_object;
+package com.demoqa.page_object;
 
-import demoqa_com.model.ItemTextBox;
+import com.demoqa.model.ItemTextBox;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
-
-import java.util.List;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class TextBoxPage {
     private final WebDriver driver;
     @FindBy(css = "input#userName")
-   private WebElement inputFullName;
+    WebElement inputFullName;
     @FindBy(css = "input#userEmail")
     private WebElement inputEmail;
 
@@ -30,6 +30,7 @@ public class TextBoxPage {
     private WebElement totalInfoCurrentAddressText;
     @FindBy(css = ".border.col-md-12.col-sm-12 p#permanentAddress")
     private WebElement totalInfoPermanentAddressText;
+
 
     public TextBoxPage(WebDriver driver) {
         this.driver = driver;

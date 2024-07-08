@@ -1,4 +1,4 @@
-package base;
+package com.demoqa.base;
 
 import org.junit.jupiter.api.BeforeEach;
 
