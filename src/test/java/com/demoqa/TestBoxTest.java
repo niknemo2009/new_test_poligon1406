@@ -17,7 +17,19 @@ public class TestBoxTest extends BaseTest {
     public final String FILE_SCREENSHOTS = "./Screenshots/%s.png";
     private TextBoxPage textBoxPage;
 
+    public static Stream<Arguments> dataList() {
+        return Stream.of(
+                Arguments.of("FullName", "qwe@qwe.com", "Ukraine", "Lviv"),
+                Arguments.of("", "qwe12@qwe.com", "Ukraine", "Lviv"),
+                Arguments.of("FullName", "", "Ukraine", "Lviv"),
+                Arguments.of("FullName", "qwe@qwe.com", "", "Lviv"),
+                Arguments.of("FullName", "qwe@qwe.com", "Ukraine", ""),
+                Arguments.of("", "qwe@qwe.com", "", ""),
+                Arguments.of("", "", "", ""),
+                Arguments.of(repeat("fullName", 550), "qwe@wer.com", "rfdfddf", "dfdfdfdf")
 
+        );
+    }
 
     @BeforeEach
     public void init(TestInfo testInfo) {
@@ -42,10 +54,9 @@ public class TestBoxTest extends BaseTest {
 
     }
 
-
     @Test
     @DisplayName("1.2 I should correct validate email after submit if  email is invalid")
-    public void testBase( ) throws Exception {
+    public void testBase() throws Exception {
         ItemTextBox item = new ItemTextBox("fullName", "invalid email.com", "currentAddress", "permanentAddress");
         textBoxPage.typeName(item.fullName());
         textBoxPage.typeEmail(item.email());
@@ -54,28 +65,12 @@ public class TestBoxTest extends BaseTest {
         textBoxPage.submit.click();
         assertAll("Check a validation invalid email!",
                 () -> assertEquals(textBoxPage.getCssClassInputEmail(), "mr-sm-2 field-error form-control", "Problem with attribute  class for inputEmail !"),
-                () -> Assertions.assertEquals(new ItemTextBox("","","",""),
-                        textBoxPage.getTotalInfo(),"Problem with totalInfo for invalid email")
+                () -> Assertions.assertEquals(new ItemTextBox("", "", "", ""),
+                        textBoxPage.getTotalInfo(), "Problem with totalInfo for invalid email")
         );
 
 
     }
-    public static Stream<Arguments> dataList() {
-        return Stream.of(
-                Arguments.of("FullName", "qwe@qwe.com", "Ukraine", "Lviv"),
-                Arguments.of("", "qwe12@qwe.com", "Ukraine", "Lviv"),
-                Arguments.of("FullName", "", "Ukraine", "Lviv"),
-                Arguments.of("FullName", "qwe@qwe.com", "", "Lviv"),
-                Arguments.of("FullName", "qwe@qwe.com", "Ukraine", ""),
-                Arguments.of("", "qwe@qwe.com", "", ""),
-                Arguments.of("", "", "", ""),
-                Arguments.of(repeat("fullName",550), "qwe@wer.com", "rfdfddf", "dfdfdfdf")
-
-        );
-    }
-
-
-
 
 
 }

@@ -13,6 +13,18 @@ import java.time.Duration;
 public class LoginRegistryPage {
     private final WebDriver driver;
     protected WebDriverWait wait;
+    @FindBy(id = "userName-label")
+    WebElement labelUser;
+    @FindBy(id = "userName")
+    WebElement inputUserName;
+    @FindBy(id = "password-label")
+    WebElement labelPassword;
+    @FindBy(id = "password")
+    WebElement inputPassword;
+    @FindBy(id = "login")
+    WebElement buttonLogin;
+    @FindBy(id = "newUser")
+    WebElement buttonRegistry;
     @FindBys({@FindBy(tagName = "h1"),
             @FindBy(linkText = "Login")})
     private WebElement header1;
@@ -22,18 +34,6 @@ public class LoginRegistryPage {
     @FindBys({@FindBy(tagName = "h5"),
             @FindBy(linkText = "Login in Book Store")})
     private WebElement header3;
-    @FindBy(id="userName-label")
-    WebElement labelUser;
-    @FindBy(id="userName")
-    WebElement inputUserName;
-    @FindBy(id="password-label")
-    WebElement labelPassword;
-    @FindBy(id="password")
-    WebElement inputPassword;
-    @FindBy(id="login")
-    WebElement buttonLogin;
-    @FindBy(id="newUser")
-    WebElement buttonRegistry;
 
     public LoginRegistryPage(WebDriver driver) {
         this.driver = driver;
@@ -41,34 +41,35 @@ public class LoginRegistryPage {
         PageFactory.initElements(driver, this);
     }
 
-    private LoginRegistryPage typeLogin(String login){
+    private LoginRegistryPage typeLogin(String login) {
         WebElement element = wait.until(ExpectedConditions.visibilityOf(inputUserName));
         element.sendKeys(login);
         return this;
 
     }
 
-    private LoginRegistryPage typePassword(String password){
+    private LoginRegistryPage typePassword(String password) {
         WebElement element = wait.until(ExpectedConditions.visibilityOf(inputPassword));
         element.sendKeys(password);
         return this;
     }
 
-    private void clickLogin(){
+    private void clickLogin() {
         wait.until(ExpectedConditions.elementToBeClickable(buttonLogin)).click();
     }
 
 
-    public  StartPage  signInExistsUser(String login , String password){
-                 typeLogin(login).typePassword(password).clickLogin();
-                 return new StartPage(driver);
+    public StartPage signInExistsUser(String login, String password) {
+        typeLogin(login).typePassword(password).clickLogin();
+        return new StartPage(driver);
     }
 
-    public  ErrorLoginPage  signInNotExistsUser(String login , String password){
+    public ErrorLoginPage signInNotExistsUser(String login, String password) {
         typeLogin(login).typePassword(password).clickLogin();
         return new ErrorLoginPage(driver);
     }
-    public  RegistrationPage  registrationClick(){
+
+    public RegistrationPage registrationClick() {
         wait.until(ExpectedConditions.visibilityOf(buttonRegistry)).click();
         return new RegistrationPage(driver);
     }

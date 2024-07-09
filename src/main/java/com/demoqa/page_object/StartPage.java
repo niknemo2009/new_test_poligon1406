@@ -11,17 +11,17 @@ import java.time.Duration;
 
 public class StartPage {
     private final WebDriver driver;
-    private WebDriverWait wait;
-
-    @FindBy(id="userName-value")
+    @FindBy(id = "userName-value")
     WebElement labelNameUser;
+    private final WebDriverWait wait;
+
     public StartPage(WebDriver driver) {
         this.driver = driver;
         wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         PageFactory.initElements(driver, this);
     }
 
-  public  String getNameSignInUser(){
+    public String getNameSignInUser() {
         WebElement element = wait.until(ExpectedConditions.visibilityOf(labelNameUser));
         return element.getText();
     }
