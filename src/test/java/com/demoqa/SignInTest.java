@@ -2,6 +2,7 @@ package com.demoqa;
 
 import com.demoqa.base.BaseTest;
 import com.demoqa.model.ItemTextBox;
+import com.demoqa.model.User;
 import com.demoqa.page_object.ErrorLoginPage;
 import com.demoqa.page_object.LoginRegistryPage;
 import com.demoqa.page_object.StartPage;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.opentest4j.AssertionFailedError;
 
 import java.util.stream.Stream;
 
@@ -30,20 +32,37 @@ public class SignInTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Positive tests")
+    @DisplayName("2.1 As registered user I should sign In with my credentials")
     public void testSigniInWithExistedUsers() throws Exception {
+        var user =new User("User","Userovich","user55","LkHQA*eyN6nPTiM");
+       var regPage= loginPage.registrationClick();
+       regPage.registerUser(user);
         StartPage expectedResult=loginPage.signInExistsUser("user33","LkHQA*eyN6nPTiM");
-        makeScreenshot(FILE_SCREENSHOTS.formatted(testInfo.getDisplayName()), driver);
-        assertEquals("user33",expectedResult.getNameSignInUser());
+
+       try{
+           assertEquals("user331",expectedResult.getNameSignInUser(),"Problem with name expected user !");
+       }catch(AssertionFailedError e){
+           makeScreenshot(FILE_SCREENSHOTS.formatted(testInfo.getDisplayName()+e.getMessage()), driver);
+           throw   new AssertionFailedError(e.getMessage());
+
+       }
+
 
 
     }
     @Test
-    @DisplayName("Positive tests")
+    @DisplayName("2.2 As unregistered user I should Not sign In with any credentials")
     public void testSigniInWithNotExistedUsers() throws Exception {
+
         ErrorLoginPage expectedResult=loginPage.signInNotExistsUser("user333","LkHQA*eyN6nPTiM");
-        makeScreenshot(FILE_SCREENSHOTS.formatted(testInfo.getDisplayName()), driver);
-        assertEquals("Invalid username or password!",expectedResult.getErrorMessage());
+        try{
+            assertEquals("Invalid username or password!",expectedResult.getErrorMessage());
+        }catch(AssertionFailedError e){
+            makeScreenshot(FILE_SCREENSHOTS.formatted(testInfo.getDisplayName()+e.getMessage()), driver);
+            throw   new AssertionFailedError(e.getMessage());
+
+        }
+
 
 
     }

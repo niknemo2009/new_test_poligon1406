@@ -68,4 +68,9 @@ public class LoginRegistryPage {
         typeLogin(login).typePassword(password).clickLogin();
         return new ErrorLoginPage(driver);
     }
+    public  RegistrationPage  registrationClick(){
+        wait.until(ExpectedConditions.visibilityOf(buttonRegistry)).click();
+        return new RegistrationPage(driver);
+    }
+
 }
