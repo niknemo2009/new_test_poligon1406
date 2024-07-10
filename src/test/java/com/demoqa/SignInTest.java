@@ -7,7 +7,9 @@ import com.demoqa.model.User;
 import com.demoqa.page_object.ErrorLoginPage;
 import com.demoqa.page_object.LoginRegistryPage;
 import com.demoqa.page_object.StartPage;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -21,10 +23,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SignInTest extends BaseTest {
 
-    private LoginRegistryPage loginPage;
-    Logger logger = LoggerFactory.getLogger(SignInTest.class);
     private final String START_URL = "https://demoqa.com/login";
+    Logger logger = LoggerFactory.getLogger(SignInTest.class);
+    private LoginRegistryPage loginPage;
 
+    public static Stream<Arguments> generateTestData() {
+        return Stream.of(
+                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.CHROME, 0),
+                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.CHROME, 0),
+                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.CHROME, 0),
+                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.CHROME, 5),
+                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.CHROME, 5),
+                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.CHROME, 5),
+                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.FIREFOX, 0),
+                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.FIREFOX, 0),
+                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.FIREFOX, 0),
+                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.FIREFOX, 5),
+                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.FIREFOX, 5),
+                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.FIREFOX, 5));
+    }
 
     private void setUpTest(int delta, TypeBrowser browser) {
         init(delta, browser);
@@ -53,7 +70,7 @@ public class SignInTest extends BaseTest {
     @ParameterizedTest
     @MethodSource("generateTestData")
     @DisplayName("2.2 As unregistered user I should Not sign In with any credentials")
-    public void testSigniInWithNotExistedUsers(User unregisteredUser, TypeBrowser currentBrowser, int deltaVersion,TestInfo testInfo) throws Exception {
+    public void testSigniInWithNotExistedUsers(User unregisteredUser, TypeBrowser currentBrowser, int deltaVersion, TestInfo testInfo) throws Exception {
         setUpTest(deltaVersion, currentBrowser);
         ErrorLoginPage expectedResult = loginPage.signInNotExistsUser(unregisteredUser.userName(), unregisteredUser.password());
         try {
@@ -67,23 +84,6 @@ public class SignInTest extends BaseTest {
 
     }
 
-    public static Stream<Arguments> generateTestData() {
-        return Stream.of(
-                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.CHROME, 0),
-        Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.CHROME, 0),
-                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.CHROME, 0),
-                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.CHROME, 5),
-                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.CHROME, 5),
-                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.CHROME, 5),
-                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.FIREFOX, 0),
-                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.FIREFOX, 0),
-                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.FIREFOX, 0),
-                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.FIREFOX, 5),
-                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.FIREFOX, 5),
-                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.FIREFOX, 5));
-    }
-
-    ;
 }
 
 

@@ -16,7 +16,7 @@ public class TextBoxPage {
     @FindBy(css = "button#submit")
     private WebElement submit;
     @FindBy(css = "input#userName")
-   private WebElement inputFullName;
+    private WebElement inputFullName;
     @FindBy(css = "input#userEmail")
     private WebElement inputEmail;
     @FindBy(css = "textarea#currentAddress")
@@ -42,33 +42,32 @@ public class TextBoxPage {
 
     public void typeName(String fullName) {
         WebElement element = wait.until(ExpectedConditions.visibilityOf(inputFullName));
-      //  element.click();
+        //  element.click();
         element.sendKeys(fullName);
     }
 
     public void typeEmail(String email) {
         WebElement element = wait.until(ExpectedConditions.visibilityOf(inputEmail));
-      //  element.click();
+        //  element.click();
         element.sendKeys(email);
     }
 
     public void typeCurrentAddress(String currentAddress) {
         WebElement element = wait.until(ExpectedConditions.visibilityOf(inputCurrentAdress));
-      //  element.click();
+        //  element.click();
         element.sendKeys(currentAddress);
     }
 
     public void typePermanentAddress(String permanentAddress) {
         WebElement element = wait.until(ExpectedConditions.visibilityOf(inputPermamentAdress));
-       // element.click();
+        // element.click();
         element.sendKeys(permanentAddress);
     }
 
-    public void submitForm(){
+    public void submitForm() {
         wait.until(ExpectedConditions.elementToBeClickable(submit));
         submit.click();
     }
-
 
 
     public ItemTextBox getTotalInfo() {
