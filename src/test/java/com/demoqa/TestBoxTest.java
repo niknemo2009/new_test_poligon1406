@@ -26,7 +26,7 @@ public class TestBoxTest extends BaseTest {
 
 
     private void setUpTest(int delta, TypeBrowser browser) {
-        init(testInfo, delta, browser);
+        init(delta, browser);
         driver.get(START_URL);
         textBoxPage = new TextBoxPage(driver);
         logger.info(Color.GREEN.value() + "Before each !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + Color.RESET.value());
@@ -36,7 +36,7 @@ public class TestBoxTest extends BaseTest {
     @ParameterizedTest(name = "1.1 I should type valid name= {0}, valid email= {1}, valid currentAddress= {2},valid permanentAddress= {3} and submit ")
     @MethodSource("dataList")
     @DisplayName("Positive tests")
-    public void testBase(String fullName, String email, String currentAddress, String permanentAddress) throws Exception {
+    public void testBase(String fullName, String email, String currentAddress, String permanentAddress,TestInfo testInfo) throws Exception {
         setUpTest(0, TypeBrowser.CHROME);
         ItemTextBox item = new ItemTextBox(fullName, email, currentAddress, permanentAddress);
         textBoxPage.typeName(item.fullName());
@@ -44,7 +44,7 @@ public class TestBoxTest extends BaseTest {
         textBoxPage.typeCurrentAddress(item.currentAddress());
         textBoxPage.typePermanentAddress(item.permanentAddress());
         textBoxPage.submitForm();
-        makeScreenshot(FILE_SCREENSHOTS.formatted(testInfo.getDisplayName()), driver);
+       makeScreenshot(FILE_SCREENSHOTS.formatted(testInfo.getDisplayName()), driver);
         Assertions.assertEquals(item, textBoxPage.getTotalInfo());
 
 

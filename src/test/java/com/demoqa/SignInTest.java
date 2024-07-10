@@ -3,16 +3,19 @@ package com.demoqa;
 import com.demoqa.base.BaseTest;
 import com.demoqa.base.Color;
 import com.demoqa.base.TypeBrowser;
+import com.demoqa.model.User;
 import com.demoqa.page_object.ErrorLoginPage;
 import com.demoqa.page_object.LoginRegistryPage;
 import com.demoqa.page_object.StartPage;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -20,21 +23,20 @@ public class SignInTest extends BaseTest {
 
     private LoginRegistryPage loginPage;
     Logger logger = LoggerFactory.getLogger(SignInTest.class);
-    private final String START_URL= "https://demoqa.com/login";
-
-
+    private final String START_URL = "https://demoqa.com/login";
 
 
     private void setUpTest(int delta, TypeBrowser browser) {
-        init(testInfo, delta, browser);
+        init(delta, browser);
         driver.get(START_URL);
         loginPage = new LoginRegistryPage(driver);
         logger.info(Color.GREEN.value() + "Before each !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + Color.RESET.value());
     }
+
     @Test
     @DisplayName("2.1 As registered user I should sign In with my credentials")
-    public void testSigniInWithExistedUsers() throws Exception {
-        setUpTest(0, TypeBrowser.CHROME);
+    public void testSigniInWithExistedUsers(TestInfo testInfo) throws Exception {
+        setUpTest(5, TypeBrowser.FIREFOX);
         StartPage expectedResult = loginPage.signInExistsUser(USER_LOGIN, USER_PASSWORD);
 
         try {
@@ -48,11 +50,12 @@ public class SignInTest extends BaseTest {
 
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("generateTestData")
     @DisplayName("2.2 As unregistered user I should Not sign In with any credentials")
-    public void testSigniInWithNotExistedUsers() throws Exception {
-        setUpTest(0, TypeBrowser.CHROME);
-        ErrorLoginPage expectedResult = loginPage.signInNotExistsUser("user333", "LkHQA*eyN6nPTiM");
+    public void testSigniInWithNotExistedUsers(User unregisteredUser, TypeBrowser currentBrowser, int deltaVersion,TestInfo testInfo) throws Exception {
+        setUpTest(deltaVersion, currentBrowser);
+        ErrorLoginPage expectedResult = loginPage.signInNotExistsUser(unregisteredUser.userName(), unregisteredUser.password());
         try {
             assertEquals("Invalid username or password!", expectedResult.getErrorMessage());
         } catch (AssertionFailedError e) {
@@ -64,38 +67,24 @@ public class SignInTest extends BaseTest {
 
     }
 
-//
-//    @Test
-//    @DisplayName("1.2 I should correct validate email after submit if  email is invalid")
-//    public void testBase( ) throws Exception {
-//        ItemTextBox item = new ItemTextBox("fullName", "invalid email.com", "currentAddress", "permanentAddress");
-//        textBoxPage.typeName(item.fullName());
-//        textBoxPage.typeEmail(item.email());
-//        textBoxPage.typeCurrentAddress(item.currentAddress());
-//        textBoxPage.typePermanentAddress(item.permanentAddress());
-//        textBoxPage.submit.click();
-//        assertAll("Check a validation invalid email!",
-//                () -> assertEquals(textBoxPage.getCssClassInputEmail(), "mr-sm-2 field-error form-control", "Problem with attribute  class for inputEmail !"),
-//                () -> Assertions.assertEquals(new ItemTextBox("","","",""),
-//                        textBoxPage.getTotalInfo(),"Problem with totalInfo for invalid email")
-//        );
-//
-//
-//    }
-//    public static Stream<Arguments> dataList() {
-//        return Stream.of(
-//                Arguments.of("FullName", "qwe@qwe.com", "Ukraine", "Lviv"),
-//                Arguments.of("", "qwe12@qwe.com", "Ukraine", "Lviv"),
-//                Arguments.of("FullName", "", "Ukraine", "Lviv"),
-//                Arguments.of("FullName", "qwe@qwe.com", "", "Lviv"),
-//                Arguments.of("FullName", "qwe@qwe.com", "Ukraine", ""),
-//                Arguments.of("", "qwe@qwe.com", "", ""),
-//                Arguments.of("", "", "", ""),
-//                Arguments.of(repeat("fullName",550), "qwe@wer.com", "rfdfddf", "dfdfdfdf")
-//
-//        );
-//    }
+    public static Stream<Arguments> generateTestData() {
+        return Stream.of(
+                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.CHROME, 0),
+        Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.CHROME, 0),
+                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.CHROME, 0),
+                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.CHROME, 5),
+                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.CHROME, 5),
+                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.CHROME, 5),
+                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.FIREFOX, 0),
+                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.FIREFOX, 0),
+                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.FIREFOX, 0),
+                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.FIREFOX, 5),
+                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.FIREFOX, 5),
+                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.FIREFOX, 5));
+    }
 
-
+    ;
 }
+
+
 

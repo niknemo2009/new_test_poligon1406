@@ -13,7 +13,7 @@ import java.time.Duration;
 public class TextBoxPage {
     private final WebDriver driver;
     protected WebDriverWait wait;
-    @FindBy(id = "submit")
+    @FindBy(css = "button#submit")
     private WebElement submit;
     @FindBy(css = "input#userName")
    private WebElement inputFullName;

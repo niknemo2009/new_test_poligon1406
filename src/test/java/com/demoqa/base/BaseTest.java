@@ -25,7 +25,7 @@ import java.util.Properties;
 public abstract class BaseTest {
     protected WebDriver driver;
     protected WebDriverWait wait;
-    protected TestInfo testInfo;
+   // protected TestInfo testInfo;
     private static Properties properties =new Properties();
    protected  static String USER_LOGIN;
     protected static String USER_PASSWORD;
@@ -48,15 +48,15 @@ public abstract class BaseTest {
     @AfterEach
     public void quit() {
         if (driver != null) {
-            driver.close();
-            driver.quit();
+           driver.close();
+         //  driver.quit();
         }
     }
 
 
 
-    public void init(TestInfo testInfo, int delta, TypeBrowser browser) {
-        this.testInfo = testInfo;
+    public void init(int delta, TypeBrowser browser) {
+    //    this.testInfo = testInfo;
         switch (browser) {
             case CHROME -> startChromeDriver(delta);
             case FIREFOX -> startFirefoxDriver(delta);
@@ -96,6 +96,6 @@ public abstract class BaseTest {
     public void makeScreenshot(String pathFile, WebDriver driver) throws Exception {
         TakesScreenshot screenshot = (TakesScreenshot) driver;
         File source = screenshot.getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(source, new File(pathFile.substring(0, pathFile.length() > 100 ? 100 : pathFile.length())));
+        FileUtils.copyFile(source, new File(pathFile.substring(0, pathFile.length() > 100 ? 100 : pathFile.length())+".png"));
     }
 }
