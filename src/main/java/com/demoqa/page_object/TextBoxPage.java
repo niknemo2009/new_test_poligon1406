@@ -5,13 +5,18 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class TextBoxPage {
     private final WebDriver driver;
+    protected WebDriverWait wait;
     @FindBy(id = "submit")
-    public WebElement submit;
+    private WebElement submit;
     @FindBy(css = "input#userName")
-    WebElement inputFullName;
+   private WebElement inputFullName;
     @FindBy(css = "input#userEmail")
     private WebElement inputEmail;
     @FindBy(css = "textarea#currentAddress")
@@ -30,29 +35,41 @@ public class TextBoxPage {
 
     public TextBoxPage(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         PageFactory.initElements(driver, this);
 
     }
 
     public void typeName(String fullName) {
-        inputFullName.click();
-        inputFullName.sendKeys(fullName);
+        WebElement element = wait.until(ExpectedConditions.visibilityOf(inputFullName));
+      //  element.click();
+        element.sendKeys(fullName);
     }
 
     public void typeEmail(String email) {
-        inputEmail.click();
-        inputEmail.sendKeys(email);
+        WebElement element = wait.until(ExpectedConditions.visibilityOf(inputEmail));
+      //  element.click();
+        element.sendKeys(email);
     }
 
     public void typeCurrentAddress(String currentAddress) {
-        inputCurrentAdress.click();
-        inputCurrentAdress.sendKeys(currentAddress);
+        WebElement element = wait.until(ExpectedConditions.visibilityOf(inputCurrentAdress));
+      //  element.click();
+        element.sendKeys(currentAddress);
     }
 
     public void typePermanentAddress(String permanentAddress) {
-        inputPermamentAdress.click();
-        inputPermamentAdress.sendKeys(permanentAddress);
+        WebElement element = wait.until(ExpectedConditions.visibilityOf(inputPermamentAdress));
+       // element.click();
+        element.sendKeys(permanentAddress);
     }
+
+    public void submitForm(){
+        wait.until(ExpectedConditions.elementToBeClickable(submit));
+        submit.click();
+    }
+
+
 
     public ItemTextBox getTotalInfo() {
         String _fullName;

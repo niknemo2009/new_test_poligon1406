@@ -1,6 +1,8 @@
 package com.demoqa;
 
 import com.demoqa.base.BaseTest;
+import com.demoqa.base.Color;
+import com.demoqa.base.TypeBrowser;
 import com.demoqa.page_object.ErrorLoginPage;
 import com.demoqa.page_object.LoginRegistryPage;
 import com.demoqa.page_object.StartPage;
@@ -9,23 +11,30 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.opentest4j.AssertionFailedError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SignInTest extends BaseTest {
 
     private LoginRegistryPage loginPage;
+    Logger logger = LoggerFactory.getLogger(SignInTest.class);
+    private final String START_URL= "https://demoqa.com/login";
 
 
-    @BeforeEach
-    public void init(TestInfo testInfo) {
-        super.init(testInfo);
-        driver.get("https://demoqa.com/login");
+
+
+    private void setUpTest(int delta, TypeBrowser browser) {
+        init(testInfo, delta, browser);
+        driver.get(START_URL);
         loginPage = new LoginRegistryPage(driver);
+        logger.info(Color.GREEN.value() + "Before each !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + Color.RESET.value());
     }
-
     @Test
     @DisplayName("2.1 As registered user I should sign In with my credentials")
     public void testSigniInWithExistedUsers() throws Exception {
+        setUpTest(0, TypeBrowser.CHROME);
         StartPage expectedResult = loginPage.signInExistsUser(USER_LOGIN, USER_PASSWORD);
 
         try {
@@ -42,7 +51,7 @@ public class SignInTest extends BaseTest {
     @Test
     @DisplayName("2.2 As unregistered user I should Not sign In with any credentials")
     public void testSigniInWithNotExistedUsers() throws Exception {
-
+        setUpTest(0, TypeBrowser.CHROME);
         ErrorLoginPage expectedResult = loginPage.signInNotExistsUser("user333", "LkHQA*eyN6nPTiM");
         try {
             assertEquals("Invalid username or password!", expectedResult.getErrorMessage());

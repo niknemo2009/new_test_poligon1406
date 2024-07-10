@@ -1,5 +1,6 @@
 package com.demoqa.base;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -34,7 +35,7 @@ public abstract class BaseTest {
     public static void setUp(){
         try {
             String workDir=System.getProperty("user.dir");
-            properties.load(new FileInputStream(workDir+"/src/test/constants.properties"));
+            properties.load(new FileInputStream(workDir+"/src/test/resources/constants.properties"));
             USER_LOGIN= properties.getProperty("USER_LOGIN");
             USER_PASSWORD= properties.getProperty("USER_PASSWORD");
             PATH_SCREENSHOTS= properties.getProperty("PATH_SCREENSHOTS");
@@ -43,13 +44,6 @@ public abstract class BaseTest {
         }
     }
 
-    @BeforeEach
-    public void init(TestInfo testInfo) {
-        this.testInfo = testInfo;
-        startChromeDriver();
-        driver.manage().window().maximize();
-
-    }
 
     @AfterEach
     public void quit() {
@@ -61,26 +55,33 @@ public abstract class BaseTest {
 
 
 
+    public void init(TestInfo testInfo, int delta, TypeBrowser browser) {
+        this.testInfo = testInfo;
+        switch (browser) {
+            case CHROME -> startChromeDriver(delta);
+            case FIREFOX -> startFirefoxDriver(delta);
+        }
+        driver.manage().window().maximize();
 
-    protected FirefoxDriver startFirefoxDriver() {
-        return startFirefoxDriver(new FirefoxOptions());
     }
 
-    protected FirefoxDriver startFirefoxDriver(FirefoxOptions options) {
-        options.setImplicitWaitTimeout(Duration.ofSeconds(1));
-        driver = new FirefoxDriver(options);
-        return (FirefoxDriver) driver;
+
+
+    protected void startFirefoxDriver(int deltaVersion) {
+        WebDriverManager wdm = WebDriverManager.firefoxdriver().browserInDocker()
+                .dockerDefaultArgs("--disable-gpu,--no-sandbox")
+                .browserVersion("latest-" + deltaVersion);
+        driver = wdm.create();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
     }
 
-    protected ChromeDriver startChromeDriver() {
-        ChromeOptions options = new ChromeOptions();
-        options.setImplicitWaitTimeout(Duration.ofSeconds(1));
-        return startChromeDriver(options);
-    }
+    protected void startChromeDriver(int deltaVersion) {
+        WebDriverManager wdm = WebDriverManager.chromedriver().browserInDocker()
+                .dockerDefaultArgs("--disable-gpu,--no-sandbox")
+                .browserVersion("latest-" + deltaVersion);
+        driver = wdm.create();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
 
-    protected ChromeDriver startChromeDriver(ChromeOptions options) {
-        driver = new ChromeDriver(options);
-        return (ChromeDriver) driver;
     }
 
 
