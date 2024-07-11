@@ -14,17 +14,17 @@ public class LoginRegistryPage {
     private final WebDriver driver;
     protected WebDriverWait wait;
     @FindBy(id = "userName-label")
-    WebElement labelUser;
+    private WebElement labelUser;
     @FindBy(id = "userName")
-    WebElement inputUserName;
+    private WebElement inputUserName;
     @FindBy(id = "password-label")
-    WebElement labelPassword;
+    private WebElement labelPassword;
     @FindBy(id = "password")
-    WebElement inputPassword;
+    private WebElement inputPassword;
     @FindBy(id = "login")
-    WebElement buttonLogin;
+    private WebElement buttonLogin;
     @FindBy(id = "newUser")
-    WebElement buttonRegistry;
+    private WebElement buttonRegistry;
     @FindBys({@FindBy(tagName = "h1"),
             @FindBy(linkText = "Login")})
     private WebElement header1;

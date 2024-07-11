@@ -27,22 +27,6 @@ public class SignInTest extends BaseTest {
     Logger logger = LoggerFactory.getLogger(SignInTest.class);
     private LoginRegistryPage loginPage;
 
-    public static Stream<Arguments> generateTestData() {
-        return Stream.of(
-                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.CHROME, 0),
-                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.CHROME, 0),
-                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.CHROME, 0),
-                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.CHROME, 5),
-                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.CHROME, 5),
-                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.CHROME, 5),
-                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.FIREFOX, 0),
-                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.FIREFOX, 0),
-                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.FIREFOX, 0),
-                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.FIREFOX, 5),
-                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.FIREFOX, 5),
-                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.FIREFOX, 5));
-    }
-
     private void setUpTest(int delta, TypeBrowser browser) {
         init(delta, browser);
         driver.get(START_URL);
@@ -83,6 +67,23 @@ public class SignInTest extends BaseTest {
 
 
     }
+
+    public static Stream<Arguments> generateTestData() {
+        return Stream.of(
+                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.CHROME, 0),
+                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.CHROME, 0),
+                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.CHROME, 0),
+                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.CHROME, 5),
+                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.CHROME, 5),
+                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.CHROME, 5),
+                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.FIREFOX, 0),
+                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.FIREFOX, 0),
+                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.FIREFOX, 0),
+                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.FIREFOX, 5),
+                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.FIREFOX, 5),
+                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.FIREFOX, 5));
+    }
+
 
 }
 
