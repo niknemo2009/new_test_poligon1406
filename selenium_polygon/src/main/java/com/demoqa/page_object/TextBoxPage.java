@@ -7,12 +7,11 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.Duration;
 
 public class TextBoxPage {
     private final WebDriver driver;
-    protected WebDriverWait wait;
+    private WebDriverWait wait;
     @FindBy(css = "button#submit")
     private WebElement submit;
     @FindBy(css = "input#userName")

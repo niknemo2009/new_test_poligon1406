@@ -6,6 +6,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
+import java.io.IOException;
 
 public interface TestUtil {
 
@@ -18,10 +19,14 @@ public interface TestUtil {
         return sb.substring(0, countLetter);
     }
 
-    default void makeScreenshot(String pathFile, WebDriver driver) throws Exception {
+    default void makeScreenshot(String pathFile, WebDriver driver) {
         TakesScreenshot screenshot = (TakesScreenshot) driver;
         File source = screenshot.getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(source, new File(pathFile.substring(0, pathFile.length() > 100 ? 100 : pathFile.length()) + ".png"));
+        try {
+            FileUtils.copyFile(source, new File(pathFile.substring(0, pathFile.length() > 100 ? 100 : pathFile.length()) + ".png"));
+        } catch (IOException e) {
+            throw new RuntimeException("Problem with creating screenshot !",e);
+        }
     }
 
 }

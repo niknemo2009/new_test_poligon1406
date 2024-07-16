@@ -26,7 +26,45 @@ public class SignInTest extends BaseTest implements TestUtil {
 
     private final String START_URL = "https://demoqa.com/login";
     Logger logger = LoggerFactory.getLogger(SignInTest.class);
-    private LoginRegistryPage loginPage;
+    private LoginRegistryPage loginRegistryPage;
+
+
+    private void setUpTest(int delta, TypeBrowser browser) {
+        init(delta, browser);
+        driver.get(START_URL);
+        loginRegistryPage = new LoginRegistryPage(driver);
+        logger.info(Color.GREEN.value() + "Before each !" + Color.RESET.value());
+    }
+
+    @Test
+    @DisplayName("2.1 As registered user I should sign In with my credentials")
+    public void testSigniInWithExistedUsers(TestInfo testInfo) {
+        setUpTest(5, TypeBrowser.FIREFOX);
+        StartPage expectedResult = loginRegistryPage.signInExistsUser(USER_LOGIN, USER_PASSWORD);
+        try {
+            assertEquals(USER_LOGIN, expectedResult.getNameSignInUser(), "Problem with name expected user !");
+        } catch (AssertionFailedError e) {
+            makeScreenshot(PATH_SCREENSHOTS.formatted(testInfo.getDisplayName() + e.getMessage()), driver);
+            throw new AssertionFailedError(e.getMessage());
+
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("generateTestData")
+    @DisplayName("2.2 As unregistered user I should Not sign In with any credentials")
+    public void testSigniInWithNotExistedUsers(User unregisteredUser, TypeBrowser currentBrowser, int deltaVersion, TestInfo testInfo) {
+        setUpTest(deltaVersion, currentBrowser);
+        ErrorLoginPage errorLoginPage = loginRegistryPage.signInNotExistsUser(unregisteredUser.userName(), unregisteredUser.password());
+        try {
+            assertEquals("Invalid username or password!", errorLoginPage.getErrorMessage());
+        } catch (AssertionFailedError e) {
+            makeScreenshot(PATH_SCREENSHOTS.formatted(testInfo.getDisplayName() + e.getMessage()), driver);
+            throw new AssertionFailedError(e.getMessage());
+
+        }
+
+    }
 
     public static Stream<Arguments> generateTestData() {
         return Stream.of(
@@ -43,46 +81,6 @@ public class SignInTest extends BaseTest implements TestUtil {
                 Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.FIREFOX, 5),
                 Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.FIREFOX, 5));
     }
-
-    private void setUpTest(int delta, TypeBrowser browser) {
-        init(delta, browser);
-        driver.get(START_URL);
-        loginPage = new LoginRegistryPage(driver);
-        logger.info(Color.GREEN.value() + "Before each !" + Color.RESET.value());
-    }
-
-    @Test
-    @DisplayName("2.1 As registered user I should sign In with my credentials")
-    public void testSigniInWithExistedUsers(TestInfo testInfo) throws Exception {
-        setUpTest(5, TypeBrowser.FIREFOX);
-        StartPage expectedResult = loginPage.signInExistsUser(USER_LOGIN, USER_PASSWORD);
-        try {
-            assertEquals(USER_LOGIN, expectedResult.getNameSignInUser(), "Problem with name expected user !");
-        } catch (AssertionFailedError e) {
-            makeScreenshot(PATH_SCREENSHOTS.formatted(testInfo.getDisplayName() + e.getMessage()), driver);
-            throw new AssertionFailedError(e.getMessage());
-
-        }
-    }
-
-    @ParameterizedTest
-    @MethodSource("generateTestData")
-    @DisplayName("2.2 As unregistered user I should Not sign In with any credentials")
-    public void testSigniInWithNotExistedUsers(User unregisteredUser, TypeBrowser currentBrowser, int deltaVersion, TestInfo testInfo) throws Exception {
-        setUpTest(deltaVersion, currentBrowser);
-        ErrorLoginPage expectedResult = loginPage.signInNotExistsUser(unregisteredUser.userName(), unregisteredUser.password());
-        try {
-            assertEquals("Invalid username or password!", expectedResult.getErrorMessage());
-        } catch (AssertionFailedError e) {
-            makeScreenshot(PATH_SCREENSHOTS.formatted(testInfo.getDisplayName() + e.getMessage()), driver);
-            throw new AssertionFailedError(e.getMessage());
-
-        }
-
-
-    }
-
-
 }
 
 

@@ -27,6 +27,31 @@ public class TestBoxTest extends BaseTest implements TestUtil {
     Logger logger = LoggerFactory.getLogger(TestBoxTest.class);
     private TextBoxPage textBoxPage;
 
+
+
+    private void setUpTest(int delta, TypeBrowser browser) {
+        init(delta, browser);
+        driver.get(START_URL);
+        textBoxPage = new TextBoxPage(driver);
+        logger.info(Color.GREEN.value() + "Before each !" + Color.RESET.value());
+    }
+
+    @ParameterizedTest(name = "1.1 I should type valid name= {0}, valid email= {1}, valid currentAddress= {2},valid permanentAddress= {3} and submit ")
+    @MethodSource("dataList")
+    @DisplayName("Positive tests")
+    public void testBase(String fullName, String email, String currentAddress, String permanentAddress, TestInfo testInfo) {
+        setUpTest(0, TypeBrowser.CHROME);
+        ItemTextBox itemTextBox = new ItemTextBox(fullName, email, currentAddress, permanentAddress);
+        textBoxPage.typeName(itemTextBox.fullName());
+        textBoxPage.typeEmail(itemTextBox.email());
+        textBoxPage.typeCurrentAddress(itemTextBox.currentAddress());
+        textBoxPage.typePermanentAddress(itemTextBox.permanentAddress());
+        textBoxPage.submitForm();
+        makeScreenshot(FILE_SCREENSHOTS.formatted(testInfo.getDisplayName()), driver);
+        Assertions.assertEquals(itemTextBox, textBoxPage.getTotalInfo());
+
+    }
+
     public static Stream<Arguments> dataList() {
         return Stream.of(
                 Arguments.of("FullName", "qwe@qwe.com", "Ukraine", "Lviv"),
@@ -42,34 +67,9 @@ public class TestBoxTest extends BaseTest implements TestUtil {
         );
 
     }
-
-    private void setUpTest(int delta, TypeBrowser browser) {
-        init(delta, browser);
-        driver.get(START_URL);
-        textBoxPage = new TextBoxPage(driver);
-        logger.info(Color.GREEN.value() + "Before each !" + Color.RESET.value());
-    }
-
-    @ParameterizedTest(name = "1.1 I should type valid name= {0}, valid email= {1}, valid currentAddress= {2},valid permanentAddress= {3} and submit ")
-    @MethodSource("dataList")
-    @DisplayName("Positive tests")
-    public void testBase(String fullName, String email, String currentAddress, String permanentAddress, TestInfo testInfo) throws Exception {
-
-        setUpTest(0, TypeBrowser.CHROME);
-        ItemTextBox item = new ItemTextBox(fullName, email, currentAddress, permanentAddress);
-        textBoxPage.typeName(item.fullName());
-        textBoxPage.typeEmail(item.email());
-        textBoxPage.typeCurrentAddress(item.currentAddress());
-        textBoxPage.typePermanentAddress(item.permanentAddress());
-        textBoxPage.submitForm();
-        makeScreenshot(FILE_SCREENSHOTS.formatted(testInfo.getDisplayName()), driver);
-        Assertions.assertEquals(item, textBoxPage.getTotalInfo());
-
-    }
-
     @Test
     @DisplayName("1.2 I should correct validate email after submit if  email is invalid")
-    public void testBase() throws Exception {
+    public void testBase() {
 
         setUpTest(0, TypeBrowser.CHROME);
         ItemTextBox item = new ItemTextBox("fullName", "invalid email.com", "currentAddress", "permanentAddress");
