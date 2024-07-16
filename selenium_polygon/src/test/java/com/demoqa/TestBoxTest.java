@@ -1,11 +1,11 @@
 package com.demoqa;
 
 import com.demoqa.base.BaseTest;
+import com.demoqa.model.ItemTextBox;
+import com.demoqa.page_object.TextBoxPage;
 import com.demoqa.util.Color;
 import com.demoqa.util.TestUtil;
 import com.demoqa.util.TypeBrowser;
-import com.demoqa.model.ItemTextBox;
-import com.demoqa.page_object.TextBoxPage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,21 @@ public class TestBoxTest extends BaseTest implements TestUtil {
     Logger logger = LoggerFactory.getLogger(TestBoxTest.class);
     private TextBoxPage textBoxPage;
 
+    public static Stream<Arguments> dataList() {
+        return Stream.of(
+                Arguments.of("FullName", "qwe@qwe.com", "Ukraine", "Lviv"),
+                Arguments.of("", "qwe12@qwe.com", "Ukraine", "Lviv"),
+                Arguments.of("FullName", "", "Ukraine", "Lviv"),
+                Arguments.of("FullName", "qwe@qwe.com", "", "Lviv"),
+                Arguments.of("FullName", "qwe@qwe.com", "Ukraine", ""),
+                Arguments.of("", "qwe@qwe.com", "", ""),
+                Arguments.of("", "", "", ""),
+                Arguments.of(new TestUtil() {
+                }.repeat("fullName", 550), "qwe@wer.com", "rfdfddf", "dfdfdfdf")
 
+        );
+
+    }
 
     private void setUpTest(int delta, TypeBrowser browser) {
         init(delta, browser);
@@ -50,21 +64,6 @@ public class TestBoxTest extends BaseTest implements TestUtil {
         textBoxPage.submitForm();
         makeScreenshot(FILE_SCREENSHOTS.formatted(testInfo.getDisplayName()), driver);
         Assertions.assertEquals(item, textBoxPage.getTotalInfo());
-
-    }
-
-    public static  Stream<Arguments> dataList() {
-        return Stream.of(
-                Arguments.of("FullName", "qwe@qwe.com", "Ukraine", "Lviv"),
-                Arguments.of("", "qwe12@qwe.com", "Ukraine", "Lviv"),
-                Arguments.of("FullName", "", "Ukraine", "Lviv"),
-                Arguments.of("FullName", "qwe@qwe.com", "", "Lviv"),
-                Arguments.of("FullName", "qwe@qwe.com", "Ukraine", ""),
-                Arguments.of("", "qwe@qwe.com", "", ""),
-                Arguments.of("", "", "", ""),
-                Arguments.of(new TestUtil(){}.repeat("fullName", 550), "qwe@wer.com", "rfdfddf", "dfdfdfdf")
-
-        );
 
     }
 

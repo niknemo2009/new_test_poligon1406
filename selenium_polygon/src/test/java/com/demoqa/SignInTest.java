@@ -1,13 +1,13 @@
 package com.demoqa;
 
 import com.demoqa.base.BaseTest;
-import com.demoqa.util.Color;
-import com.demoqa.util.TestUtil;
-import com.demoqa.util.TypeBrowser;
 import com.demoqa.model.User;
 import com.demoqa.page_object.ErrorLoginPage;
 import com.demoqa.page_object.LoginRegistryPage;
 import com.demoqa.page_object.StartPage;
+import com.demoqa.util.Color;
+import com.demoqa.util.TestUtil;
+import com.demoqa.util.TypeBrowser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -27,6 +27,22 @@ public class SignInTest extends BaseTest implements TestUtil {
     private final String START_URL = "https://demoqa.com/login";
     Logger logger = LoggerFactory.getLogger(SignInTest.class);
     private LoginRegistryPage loginPage;
+
+    public static Stream<Arguments> generateTestData() {
+        return Stream.of(
+                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.CHROME, 0),
+                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.CHROME, 0),
+                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.CHROME, 0),
+                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.CHROME, 5),
+                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.CHROME, 5),
+                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.CHROME, 5),
+                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.FIREFOX, 0),
+                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.FIREFOX, 0),
+                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.FIREFOX, 0),
+                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.FIREFOX, 5),
+                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.FIREFOX, 5),
+                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.FIREFOX, 5));
+    }
 
     private void setUpTest(int delta, TypeBrowser browser) {
         init(delta, browser);
@@ -64,22 +80,6 @@ public class SignInTest extends BaseTest implements TestUtil {
         }
 
 
-    }
-
-    public static Stream<Arguments> generateTestData() {
-        return Stream.of(
-                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.CHROME, 0),
-                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.CHROME, 0),
-                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.CHROME, 0),
-                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.CHROME, 5),
-                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.CHROME, 5),
-                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.CHROME, 5),
-                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.FIREFOX, 0),
-                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.FIREFOX, 0),
-                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.FIREFOX, 0),
-                Arguments.arguments(new User("", "", "user1", "1234567"), TypeBrowser.FIREFOX, 5),
-                Arguments.arguments(new User("", "", "user33", "1234567"), TypeBrowser.FIREFOX, 5),
-                Arguments.arguments(new User("", "", "user1", "LkHQA*eyN6nPTiM"), TypeBrowser.FIREFOX, 5));
     }
 
 

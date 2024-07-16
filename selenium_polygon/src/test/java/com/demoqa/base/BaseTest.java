@@ -2,16 +2,12 @@ package com.demoqa.base;
 
 import com.demoqa.util.TypeBrowser;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.Duration;
@@ -19,11 +15,10 @@ import java.util.Properties;
 
 @ExtendWith(TestResultExtension.class)
 public abstract class BaseTest {
+    private static final Properties properties = new Properties();
     protected static String USER_LOGIN;
     protected static String USER_PASSWORD;
     protected static String PATH_SCREENSHOTS;
-
-    private static final Properties properties = new Properties();
     protected WebDriver driver;
     protected WebDriverWait wait;
 
@@ -49,7 +44,7 @@ public abstract class BaseTest {
     }
 
     public void init(int delta, TypeBrowser browser) {
-       switch (browser) {
+        switch (browser) {
             case CHROME -> startChromeDriver(delta);
             case FIREFOX -> startFirefoxDriver(delta);
         }
