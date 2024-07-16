@@ -3,9 +3,6 @@ package com.demoqa;
 import com.demoqa.base.BaseTest;
 import com.demoqa.model.ItemTextBox;
 import com.demoqa.page_object.TextBoxPage;
-import com.demoqa.util.Color;
-import com.demoqa.util.TestUtil;
-import com.demoqa.util.TypeBrowser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,9 +12,10 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import util.TestUtil;
+import util.TypeBrowser;
+import util.Color;
 import java.util.stream.Stream;
-
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -1,4 +1,4 @@
-package com.demoqa.util;
+package util;
 
 public enum Color {
 

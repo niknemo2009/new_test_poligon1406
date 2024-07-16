@@ -1,13 +1,12 @@
 package com.demoqa.base;
 
-import com.demoqa.util.TypeBrowser;
+import util.TypeBrowser;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.Duration;
