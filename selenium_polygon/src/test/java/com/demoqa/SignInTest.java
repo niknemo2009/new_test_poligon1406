@@ -1,8 +1,9 @@
 package com.demoqa;
 
 import com.demoqa.base.BaseTest;
-import com.demoqa.base.Color;
-import com.demoqa.base.TypeBrowser;
+import com.demoqa.util.Color;
+import com.demoqa.util.TestUtil;
+import com.demoqa.util.TypeBrowser;
 import com.demoqa.model.User;
 import com.demoqa.page_object.ErrorLoginPage;
 import com.demoqa.page_object.LoginRegistryPage;
@@ -21,7 +22,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SignInTest extends BaseTest {
+public class SignInTest extends BaseTest implements TestUtil {
 
     private final String START_URL = "https://demoqa.com/login";
     Logger logger = LoggerFactory.getLogger(SignInTest.class);
@@ -31,7 +32,7 @@ public class SignInTest extends BaseTest {
         init(delta, browser);
         driver.get(START_URL);
         loginPage = new LoginRegistryPage(driver);
-        logger.info(Color.GREEN.value() + "Before each !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + Color.RESET.value());
+        logger.info(Color.GREEN.value() + "Before each !" + Color.RESET.value());
     }
 
     @Test
@@ -39,7 +40,6 @@ public class SignInTest extends BaseTest {
     public void testSigniInWithExistedUsers(TestInfo testInfo) throws Exception {
         setUpTest(5, TypeBrowser.FIREFOX);
         StartPage expectedResult = loginPage.signInExistsUser(USER_LOGIN, USER_PASSWORD);
-
         try {
             assertEquals(USER_LOGIN, expectedResult.getNameSignInUser(), "Problem with name expected user !");
         } catch (AssertionFailedError e) {
@@ -47,8 +47,6 @@ public class SignInTest extends BaseTest {
             throw new AssertionFailedError(e.getMessage());
 
         }
-
-
     }
 
     @ParameterizedTest

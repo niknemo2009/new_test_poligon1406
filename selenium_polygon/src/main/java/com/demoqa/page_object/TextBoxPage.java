@@ -42,25 +42,21 @@ public class TextBoxPage {
 
     public void typeName(String fullName) {
         WebElement element = wait.until(ExpectedConditions.visibilityOf(inputFullName));
-        //  element.click();
         element.sendKeys(fullName);
     }
 
     public void typeEmail(String email) {
         WebElement element = wait.until(ExpectedConditions.visibilityOf(inputEmail));
-        //  element.click();
         element.sendKeys(email);
     }
 
     public void typeCurrentAddress(String currentAddress) {
         WebElement element = wait.until(ExpectedConditions.visibilityOf(inputCurrentAdress));
-        //  element.click();
         element.sendKeys(currentAddress);
     }
 
     public void typePermanentAddress(String permanentAddress) {
         WebElement element = wait.until(ExpectedConditions.visibilityOf(inputPermamentAdress));
-        // element.click();
         element.sendKeys(permanentAddress);
     }
 

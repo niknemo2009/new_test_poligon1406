@@ -1,5 +1,6 @@
 package com.demoqa.base;
 
+import com.demoqa.util.TypeBrowser;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -21,7 +22,7 @@ public abstract class BaseTest {
     protected static String USER_LOGIN;
     protected static String USER_PASSWORD;
     protected static String PATH_SCREENSHOTS;
-    // protected TestInfo testInfo;
+
     private static final Properties properties = new Properties();
     protected WebDriver driver;
     protected WebDriverWait wait;
@@ -39,30 +40,20 @@ public abstract class BaseTest {
         }
     }
 
-    public static String repeat(String source, int countLetter) {
-        StringBuilder sb = new StringBuilder();
-        while (sb.toString().length() < countLetter) {
-            sb.append(source);
-        }
-        return sb.substring(0, countLetter);
-    }
 
     @AfterEach
     public void quit() {
         if (driver != null) {
             driver.close();
-            //  driver.quit();
         }
     }
 
     public void init(int delta, TypeBrowser browser) {
-        //    this.testInfo = testInfo;
-        switch (browser) {
+       switch (browser) {
             case CHROME -> startChromeDriver(delta);
             case FIREFOX -> startFirefoxDriver(delta);
         }
         driver.manage().window().maximize();
-
     }
 
     protected void startFirefoxDriver(int deltaVersion) {
@@ -79,12 +70,6 @@ public abstract class BaseTest {
                 .browserVersion("latest-" + deltaVersion);
         driver = wdm.create();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
-
     }
 
-    public void makeScreenshot(String pathFile, WebDriver driver) throws Exception {
-        TakesScreenshot screenshot = (TakesScreenshot) driver;
-        File source = screenshot.getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(source, new File(pathFile.substring(0, pathFile.length() > 100 ? 100 : pathFile.length()) + ".png"));
-    }
 }
