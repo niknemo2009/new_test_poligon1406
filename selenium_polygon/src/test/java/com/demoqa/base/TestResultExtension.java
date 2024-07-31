@@ -1,6 +1,6 @@
 package com.demoqa.base;
 
-import com.demoqa.util.Color;
+import util.Color;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
