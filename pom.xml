@@ -11,6 +11,8 @@
     <name>new_poligon1406</name>
     <modules>
         <module>selenium_polygon</module>
+        <module>Selenium_TestNg</module>
+        <module>Restassured_polygon</module>
     </modules>
 
     <properties>
