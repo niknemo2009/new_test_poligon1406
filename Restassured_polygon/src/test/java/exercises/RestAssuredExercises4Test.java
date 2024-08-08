@@ -8,6 +8,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.equalTo;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
@@ -23,7 +24,7 @@ public class RestAssuredExercises4Test {
    private  String customerId = "12212";
     @BeforeEach
     public void createRequestSpecification() {
-
+        WireMock.reset();
         requestSpec = new RequestSpecBuilder().
                 setBaseUri("http://localhost").
                 setPort(9876).
@@ -54,7 +55,7 @@ public class RestAssuredExercises4Test {
                 </accounts>
                 """;
 
-        stubFor(get(urlPathEqualTo("/xml/customer/"+customerId+""+"/accounts"))
+        givenThat(get(urlPathEqualTo("/xml/customer/"+customerId+""+"/accounts"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/xml")
