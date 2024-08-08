@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.request;
 
 @WireMockTest(httpPort = 9876)
 public class RestAssuredExercises6Test {
@@ -54,9 +53,9 @@ public class RestAssuredExercises6Test {
                 """;
 
         given().
-            spec(requestSpec).
-        when().
-        then();
+                spec(requestSpec).
+                when().
+                then();
     }
 
     /*******************************************************
@@ -102,8 +101,8 @@ public class RestAssuredExercises6Test {
                 """;
 
         given().
-            spec(requestSpec).
-        when().
-        then();
+                spec(requestSpec).
+                when().
+                then();
     }
 }

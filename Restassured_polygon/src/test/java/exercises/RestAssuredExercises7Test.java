@@ -2,19 +2,16 @@ package exercises;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-//import dataentities.Photo;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -47,61 +44,60 @@ public class RestAssuredExercises7Test {
          * Store the user id in a variable of type int
          ******************************************************/
 
-		String jsonData1= """ 
-				{
-				  "users": [
-				    {
-				      "id": 1,
-				      "username": "Bret",
-				      "email": "qwe@gmail.com"
-				    },
-				    {
-				      "id": 2,
-				      "username": "Antonette",
-				      "email": "qaz@gmail.com"
-				    },
-				    {
-				      "id": 3,
-				      "username": "Samantha",
-				      "email": "zxc@gmail.com"
-				    },
-				    {
-				      "id": 4,
-				      "username": "Karianne",
-				      "email": "dfg@gmal.com"
-				    },
-				    {
-				      "id": 5,
-				      "username": "Kamren",
-				      "email": "adg@gmail.com"
-				    }
-				  ]
-				}
-         """;
-		stubFor(get(urlPathEqualTo("/users/" ))
-				.willReturn(aResponse()
-						.withStatus(200)
-						.withHeader("Content-Type", "application/json")
-						.withBody(jsonData1)));
+        String jsonData1 = """ 
+                {
+                  "users": [
+                    {
+                      "id": 1,
+                      "username": "Bret",
+                      "email": "qwe@gmail.com"
+                    },
+                    {
+                      "id": 2,
+                      "username": "Antonette",
+                      "email": "qaz@gmail.com"
+                    },
+                    {
+                      "id": 3,
+                      "username": "Samantha",
+                      "email": "zxc@gmail.com"
+                    },
+                    {
+                      "id": 4,
+                      "username": "Karianne",
+                      "email": "dfg@gmal.com"
+                    },
+                    {
+                      "id": 5,
+                      "username": "Kamren",
+                      "email": "adg@gmail.com"
+                    }
+                  ]
+                }
+                     """;
+        stubFor(get(urlPathEqualTo("/users/"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(jsonData1)));
 
-            given().
+        given().
                 spec(requestSpec).
-            when().
-            then();
-     List<Map<String,?>> listMap =
-				given()
-                .spec(requestSpec)
-                .when()
-                .get("/users/")
-                .then()
-                .extract().body().jsonPath().getList("users");
-		int userId = (int) listMap.stream().filter( userMap -> userMap.get("username").equals("Karianne")).findFirst().get().get("id");
-	    assertEquals(4, userId);
+                when().
+                then();
+        List<Map<String, ?>> listMap =
+                given()
+                        .spec(requestSpec)
+                        .when()
+                        .get("/users/")
+                        .then()
+                        .extract().body().jsonPath().getList("users");
+        int userId = (int) listMap.stream().filter(userMap -> userMap.get("username").equals("Karianne")).findFirst().get().get("id");
+        assertEquals(4, userId);
         /*******************************************************
          * Use a JUnit assertEquals to verify that the userId
          * is equal to 4
          ******************************************************/
-
 
 
         /*******************************************************
@@ -113,16 +109,15 @@ public class RestAssuredExercises7Test {
          * Store these in a variable of type List<Integer>.
          ******************************************************/
 
-            given().
+        given().
                 spec(requestSpec).
-            when().
-            then();
+                when().
+                then();
 
         /*******************************************************
          * Use a JUnit assertEquals to verify that the list has
          * exactly 10 items (hint: use the size() method)
          ******************************************************/
-
 
 
         /*******************************************************
@@ -138,9 +133,9 @@ public class RestAssuredExercises7Test {
          * (the accepted answer should help you solve this one).
          ******************************************************/
 
-            given().
+        given().
                 spec(requestSpec).
-            when();
+                when();
 
         /*******************************************************
          * Use a JUnit assertEquals to verify that the title of

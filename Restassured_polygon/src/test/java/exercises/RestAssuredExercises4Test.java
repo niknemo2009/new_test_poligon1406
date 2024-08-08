@@ -1,13 +1,5 @@
 package exercises;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static io.restassured.RestAssured.*;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.equalTo;
-
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import io.restassured.builder.RequestSpecBuilder;
@@ -17,11 +9,17 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+
 @WireMockTest(httpPort = 9876)
 public class RestAssuredExercises4Test {
 
     private RequestSpecification requestSpec;
-   private  String customerId = "12212";
+    private String customerId = "12212";
+
     @BeforeEach
     public void createRequestSpecification() {
         WireMock.reset();
@@ -29,7 +27,7 @@ public class RestAssuredExercises4Test {
                 setBaseUri("http://localhost").
                 setPort(9876).
                 build();
-        String xmlData= """
+        String xmlData = """
                 <?xml version="1.0" encoding="UTF-8" ?>
                 <accounts>
                 	<account>
@@ -55,7 +53,7 @@ public class RestAssuredExercises4Test {
                 </accounts>
                 """;
 
-        givenThat(get(urlPathEqualTo("/xml/customer/"+customerId+""+"/accounts"))
+        givenThat(get(urlPathEqualTo("/xml/customer/" + customerId + "" + "/accounts"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/xml")
@@ -77,15 +75,15 @@ public class RestAssuredExercises4Test {
     @Test
     public void getAccountsForCustomer12212AsXml_checkIdOfFirstAccount_shouldBe12345() {
 
-       given().
-            spec(requestSpec).
-        when().
-       get("/xml/customer/{customerId}/accounts" , customerId)
+        given().
+                spec(requestSpec).
+                when().
+                get("/xml/customer/{customerId}/accounts", customerId)
                 .then()
                 .assertThat()
                 .statusCode(200).contentType("application/xml")
                 .and()
-               .body("accounts.account[0].id", equalTo("12345"));
+                .body("accounts.account[0].id", equalTo("12345"));
 
     }
 
@@ -95,7 +93,7 @@ public class RestAssuredExercises4Test {
         given().
                 spec(requestSpec).
                 when().
-                get("/xml/customer/{customerId}/accounts" , customerId)
+                get("/xml/customer/{customerId}/accounts", customerId)
                 .then()
                 .assertThat()
                 .statusCode(200).and().extract().xmlPath().get("accounts.account[0].id").equals("12345");
@@ -119,7 +117,7 @@ public class RestAssuredExercises4Test {
         given().
                 spec(requestSpec).
                 when().
-                get("/xml/customer/{customerId}/accounts" , customerId)
+                get("/xml/customer/{customerId}/accounts", customerId)
                 .then()
                 .assertThat()
                 .statusCode(200).contentType("application/xml")
@@ -141,14 +139,14 @@ public class RestAssuredExercises4Test {
 
     @Test
     public void getAccountsForCustomer12212AsXml_checkNumberOfCheckingAccounts_shouldBe3() {
-        List list=given().
+        List list = given().
                 spec(requestSpec).
                 when().
-                get("/xml/customer/{customerId}/accounts" , customerId)
+                get("/xml/customer/{customerId}/accounts", customerId)
                 .then()
                 .statusCode(200).contentType("application/xml")
                 .extract().xmlPath().get("accounts.account.findAll{it.type=='checking'}");
-        assertThat(list.size(),equalTo(3));
+        assertThat(list.size(), equalTo(3));
     }
 
 
@@ -167,13 +165,13 @@ public class RestAssuredExercises4Test {
     @Test
     public void getAccountsForCustomer12212AsXml_checkNumberOfAccountIdsStartingWith5_shouldBe2() {
 
-        List list=given().
+        List list = given().
                 spec(requestSpec).
                 when().
-                get("/xml/customer/{customerId}/accounts" , customerId)
+                get("/xml/customer/{customerId}/accounts", customerId)
                 .then()
                 .statusCode(200).contentType("application/xml")
                 .extract().xmlPath().get("accounts.account.findAll{it.id.text().startsWith(\"5\")}");
-        assertThat(list.size(),equalTo(2));
+        assertThat(list.size(), equalTo(2));
     }
 }
