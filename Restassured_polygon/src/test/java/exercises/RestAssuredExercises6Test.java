@@ -1,13 +1,20 @@
 package exercises;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import io.github.nilwurtz.GraphqlBodyMatcher;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 @WireMockTest(httpPort = 9876)
 public class RestAssuredExercises6Test {
@@ -44,18 +51,58 @@ public class RestAssuredExercises6Test {
 
         String queryString = """
                 {
-                    fruit(id: 1) {
+                       fruit(id: int) {
                         id
                         fruit_name
                         tree_name
                     }
                 }
                 """;
+        var expectedVariables = Map.of("id", 1);
+//
+        stubFor(WireMock.get(WireMock.urlEqualTo("/graphql"))
+                .andMatching(GraphqlBodyMatcher.extensionName, GraphqlBodyMatcher.parameters(queryString, expectedVariables))
+                .willReturn(WireMock.okJson("""
+                {
+                    "data": {
+                        "fruit": {
+                            "id": 1,
+                            "fruit_name": "Apple",
+                            "tree_name": "Malus"
+                        }
+                    }
+                }""")));
+//        given().
+//                spec(requestSpec).log().all().
+//                body(queryString).
+//                when().post("/graphql").
+//                then().statusCode(200)
+//                .contentType("application/json")
+//                .body("data.fruit.fruit_name", equalTo("Apple")).body("data.fruit.tree_name",equalTo("Malus"));;
+//        String queryString = """
+//                {
+//                    fruit(id: 1) {
+//                        id
+//                        fruit_name
+//                        tree_name
+//                    }
+//                }
+//                """;
+
+        HashMap<String, Object> graphQlQuery = new HashMap<>();
+        graphQlQuery.put("query", queryString);
 
         given().
                 spec(requestSpec).
+                body(graphQlQuery).
                 when().
-                then();
+                get("/graphql").
+                then().
+                assertThat().
+                statusCode(200).
+                and().
+                body("data.fruit.fruit_name", equalTo("Apple")).
+                body("data.fruit.tree_name", equalTo("Malus"));
     }
 
     /*******************************************************

@@ -21,32 +21,6 @@ public class RestAssuredExercises3Test {
                 setBaseUri("http://localhost").
                 setPort(9876).
                 build();
-        stubFor(get(urlPathEqualTo("/token/"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("""
-                                					{
-                                  "customer": {
-                                    "id": "12212",
-                                    "firstName": "John",
-                                    "surname": "Doe",
-                                    "age": 30,
-                                    "accounts": {
-                                      "id": [
-                                       "12345",
-                                       "123455",
-                                       "123345"
-                                     ]
-                                    },
-                                    "address": {
-                                      "street": "Main Street",
-                                      "city": "Beverly Hills",
-                                      "zip": "10044"
-                                    }
-                                  }
-                                }		
-                                								""")));
 
     }
 
@@ -66,18 +40,37 @@ public class RestAssuredExercises3Test {
 
     @Test
     public void getTokenUsingBasicAuth_extractFromResponse_thenReuseAsOAuthToken() {
+        stubFor(get(urlPathEqualTo("/token")).withBasicAuth("john", "demo")
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("""
+                                 {
+                                	"tokens": 				{
+                                  "token":  "TokenTokenToken123" 
+                                                                }
+                                                                }		
+                                								""")));
+        stubFor(get(urlPathEqualTo("/secure/customer/12212")).withHeader("Authorization", equalTo("Bearer TokenTokenToken123"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")));
+        String token = given()
+                .spec(requestSpec)
+                .auth().preemptive().basic("john", "demo")
+                .when()
+                .get("/token")
+                .then()
+                .extract()
+                .path("tokens.token");
 
-        given().
-                spec(requestSpec).
-                when().
-                then();
-
-        given().
-                spec(requestSpec).
-                auth().basic("john", "demo").
-                when().
-                get("/token").
-                then();
+        given()
+                .spec(requestSpec)
+                .auth().preemptive().oauth2(token)
+                .when()
+                .get("/secure/customer/12212")
+                .then()
+                .statusCode(200);
 
     }
 }
