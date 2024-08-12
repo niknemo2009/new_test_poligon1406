@@ -46,12 +46,12 @@ public class RestAssuredExercises3Test {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody("""
-                                 {
-                                	"tokens": 				{
-                                  "token":  "TokenTokenToken123" 
-                                                                }
-                                                                }		
-                                								""")));
+                                {
+                                "tokens": 				{
+                                 "token":  "TokenTokenToken123" 
+                                                               }
+                                                               }		
+                                							""")));
         stubFor(get(urlPathEqualTo("/secure/customer/12212")).withHeader("Authorization", equalTo("Bearer TokenTokenToken123"))
                 .willReturn(aResponse()
                         .withStatus(200)

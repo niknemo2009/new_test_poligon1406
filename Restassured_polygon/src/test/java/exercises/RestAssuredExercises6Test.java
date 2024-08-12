@@ -63,15 +63,15 @@ public class RestAssuredExercises6Test {
         stubFor(WireMock.get(WireMock.urlEqualTo("/graphql"))
                 .andMatching(GraphqlBodyMatcher.extensionName, GraphqlBodyMatcher.parameters(queryString, expectedVariables))
                 .willReturn(WireMock.okJson("""
-                {
-                    "data": {
-                        "fruit": {
-                            "id": 1,
-                            "fruit_name": "Apple",
-                            "tree_name": "Malus"
-                        }
-                    }
-                }""")));
+                        {
+                            "data": {
+                                "fruit": {
+                                    "id": 1,
+                                    "fruit_name": "Apple",
+                                    "tree_name": "Malus"
+                                }
+                            }
+                        }""")));
 //        given().
 //                spec(requestSpec).log().all().
 //                body(queryString).
