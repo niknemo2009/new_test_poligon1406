@@ -138,7 +138,7 @@ public class RestAssuredExercises6Test {
 
         var asd = given().spec(requestSpec).body(Map.of("query", queryString, "variables", expectedVariables))
                 .when().post("/graphql/")
-                .then().statusCode(200).log().all()
+                .then().statusCode(200)
                 .body("data.fruit.fruit_name", equalTo(fruitName)).body("data.fruit.tree_name", equalTo(treeName));
 
     }
