@@ -9,22 +9,23 @@ import io.restassured.builder.RequestSpecBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 import util.Color;
 import util.TestUtil;
 import util.TypeBrowser;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.Test;
+
 import java.time.LocalDateTime;
 import java.util.Random;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SignInTest extends BaseTest implements TestUtil {
+public class ApiRegistrationTest extends BaseTest implements TestUtil {
 
     private final String START_URL = "https://demoqa.com/login";
-    Logger logger = LoggerFactory.getLogger(SignInTest.class);
+    Logger logger = LoggerFactory.getLogger(ApiRegistrationTest.class);
     private LoginRegistryPage loginRegistryPage;
 
 

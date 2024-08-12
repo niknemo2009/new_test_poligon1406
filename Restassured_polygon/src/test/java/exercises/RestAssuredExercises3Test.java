@@ -1,5 +1,6 @@
 package exercises;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
@@ -16,7 +17,7 @@ public class RestAssuredExercises3Test {
 
     @BeforeEach
     public void createRequestSpecification() {
-
+        WireMock.reset();
         requestSpec = new RequestSpecBuilder().
                 setBaseUri("http://localhost").
                 setPort(9876).

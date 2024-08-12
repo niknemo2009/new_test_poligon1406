@@ -8,9 +8,10 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
+import io.restassured.builder.RequestSpecBuilder;
+import static io.restassured.RestAssured.given;
 import java.time.Duration;
-
+import io.restassured.builder.RequestSpecBuilder;
 public class RegistrationPage {
 
     private final WebDriver driver;
@@ -39,7 +40,7 @@ public class RegistrationPage {
                 typeLastName(newUser.lastName()).
                 typeUserName(newUser.userName()).
                 typePassword(newUser.password()).
-                clickCaptcha().clickRegister();
+               clickRegister();
 
     }
 
@@ -49,7 +50,13 @@ public class RegistrationPage {
         return this;
 
     }
+    private String getUserName() {
+        return inputUserName.getAttribute("value");
+    }
 
+    private String getPassword() {
+        return inputPassword.getAttribute("value");
+    }
     private RegistrationPage typeLastName(String lastName) {
         WebElement element = wait.until(ExpectedConditions.visibilityOf(inputLastName));
         element.sendKeys(lastName);
@@ -84,11 +91,11 @@ public class RegistrationPage {
         return new LoginRegistryPage(driver);
     }
 
-    private RegistrationPage clickCaptcha() {
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath("//iframe[starts-with(@name, 'a-') and starts-with(@src, 'https://www.google.com/recaptcha')]")));
-        new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.elementToBeClickable(By.cssSelector("div.recaptcha-checkbox-checkmark"))).click();
-        return this;
-    }
+//    private RegistrationPage clickCaptcha() {
+//        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath("//iframe[starts-with(@name, 'a-') and starts-with(@src, 'https://www.google.com/recaptcha')]")));
+//        new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.elementToBeClickable(By.cssSelector("div.recaptcha-checkbox-checkmark"))).click();
+//        return this;
+//    }
 }
 
 
