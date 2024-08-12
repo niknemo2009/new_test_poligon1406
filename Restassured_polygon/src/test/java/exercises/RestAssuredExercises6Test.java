@@ -8,8 +8,9 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
@@ -49,18 +50,18 @@ public class RestAssuredExercises6Test {
     @Test
     public void getFruitData_checkFruitAndTreeName_shouldBeAppleAndMalus() {
 
-        String queryString = """
-                {
-                       fruit(id: int) {
-                        id
-                        fruit_name
-                        tree_name
-                    }
-                }
-                """;
+        String queryString = """                
+                query fruit($id: Int) {
+                  fruit(id: $id) {
+                          id
+                          fruit_name
+                          tree_name
+                          }
+                         }                
+                  """;
         var expectedVariables = Map.of("id", 1);
-//
-        stubFor(WireMock.get(WireMock.urlEqualTo("/graphql"))
+
+        stubFor(WireMock.post(WireMock.urlEqualTo("/graphql/"))
                 .andMatching(GraphqlBodyMatcher.extensionName, GraphqlBodyMatcher.parameters(queryString, expectedVariables))
                 .willReturn(WireMock.okJson("""
                         {
@@ -72,38 +73,12 @@ public class RestAssuredExercises6Test {
                                 }
                             }
                         }""")));
-//        given().
-//                spec(requestSpec).log().all().
-//                body(queryString).
-//                when().post("/graphql").
-//                then().statusCode(200)
-//                .contentType("application/json")
-//                .body("data.fruit.fruit_name", equalTo("Apple")).body("data.fruit.tree_name",equalTo("Malus"));;
-//        String queryString = """
-//                {
-//                    fruit(id: 1) {
-//                        id
-//                        fruit_name
-//                        tree_name
-//                    }
-//                }
-//                """;
-
-        HashMap<String, Object> graphQlQuery = new HashMap<>();
-        graphQlQuery.put("query", queryString);
-
-        given().
-                spec(requestSpec).
-                body(graphQlQuery).
-                when().
-                get("/graphql").
-                then().
-                assertThat().
-                statusCode(200).
-                and().
-                body("data.fruit.fruit_name", equalTo("Apple")).
-                body("data.fruit.tree_name", equalTo("Malus"));
+        given().spec(requestSpec).body(Map.of("query", queryString, "variables", expectedVariables))
+                .when().post("/graphql/")
+                .then().statusCode(200)
+                .body("data.fruit.fruit_name", equalTo("Apple")).body("data.fruit.tree_name", equalTo("Malus"));
     }
+
 
     /*******************************************************
      * Transform this Test into a ParameterizedTest, using
@@ -133,11 +108,11 @@ public class RestAssuredExercises6Test {
      * expression to extract the required value from the response
      ******************************************************/
 
-    @Test
-    public void getFruitDataById_checkFruitNameAndTreeName() {
-
+    @ParameterizedTest
+    @CsvSource(value = {"1:Apple:Malus", "2:Pear:Pyrus", "3:Banana:Musa"}, delimiter = ':')
+    public void getFruitDataById_checkFruitNameAndTreeName(int id, String fruitName, String treeName) {
         String queryString = """
-                query GetFruit($id: ID!)
+                query GetFruit($id: Int)
                 {
                     fruit(id: $id) {
                         id
@@ -146,10 +121,27 @@ public class RestAssuredExercises6Test {
                     }
                 }
                 """;
+        var expectedVariables = Map.of("id", id);
+        stubFor(WireMock.post(WireMock.urlEqualTo("/graphql/"))
+                .andMatching(GraphqlBodyMatcher.extensionName, GraphqlBodyMatcher.parameters(queryString, expectedVariables))
+                .willReturn(WireMock.okJson(String.format("""
+                                {
+                                    "data": {
+                                        "fruit": {
+                                            "id": %d,
+                                            "fruit_name": "%s",
+                                            "tree_name": "%s"
+                                        }
+                                    }
+                                }""", id, fruitName
+                        , treeName))));
 
-        given().
-                spec(requestSpec).
-                when().
-                then();
+        var asd = given().spec(requestSpec).body(Map.of("query", queryString, "variables", expectedVariables))
+                .when().post("/graphql/")
+                .then().statusCode(200).log().all()
+                .body("data.fruit.fruit_name", equalTo(fruitName)).body("data.fruit.tree_name", equalTo(treeName));
+
     }
+
+
 }
